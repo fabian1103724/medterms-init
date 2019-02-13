@@ -5,34 +5,42 @@ import java.awt.event.KeyListener;
 public class MyFrame extends JFrame implements KeyListener{
 
 	Draw drawing;
-	Hero hero1;
 
 	public MyFrame(){
 		this.drawing = new Draw();
-		this.hero1 = new Hero();
-
 	}
 
 	public void keyPressed(KeyEvent e){
-		if(e.getKeyCode() == KeyEvent.VK_UP){
-			drawing.hero1.moveUp();
-			System.out.println("pos: " + drawing.hero1.x + ", " + drawing.hero1.y);
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT && e.getKeyCode() == KeyEvent.VK_DOWN){
+			drawing.moveRight();
+			drawing.moveDown();
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_RIGHT && e.getKeyCode() == KeyEvent.VK_UP){
+			drawing.moveRight();
+			drawing.moveUp();
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_UP){
+			drawing.moveUp();
+			System.out.println("pos: " + drawing.x + ", " + drawing.y);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-			drawing.hero1.moveRight();
-			System.out.println("pos: " + drawing.hero1.x + ", " + drawing.hero1.y);
+			drawing.moveRight();
+			System.out.println("pos: " + drawing.x + ", " + drawing.y);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_DOWN){
-			drawing.hero1.moveDown();
-			System.out.println("pos: " + drawing.hero1.x + ", " + drawing.hero1.y);
+			drawing.moveDown();
+			System.out.println("pos: " + drawing.x + ", " + drawing.y);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT){
-			drawing.hero1.moveLeft();
-			System.out.println("pos: " + drawing.hero1.x + ", " + drawing.hero1.y);
+			drawing.moveLeft();
+			System.out.println("pos: " + drawing.x + ", " + drawing.y);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_SPACE){
-			drawing.hero1.attack();
+			drawing.attack();
 			System.out.println("attack");
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_S){
+			drawing.spawnEnemy();
 		}
 	}
 
