@@ -10,10 +10,11 @@ import java.util.Random;
 
 public class Draw extends JComponent{
 
-	private BufferedImage image;
-	private BufferedImage backgroundImage;
+	public BufferedImage image;
+	public BufferedImage backgroundImage;
 	public URL resource = getClass().getResource("run0.png");
-	public URL resource1 = getClass().getResource("run10.png");
+
+	
 	
 	// circle's position
 	public int x = 300;
@@ -32,9 +33,12 @@ public class Draw extends JComponent{
 	public int enemyCount;
 	Monster[] monsters = new Monster[10];
 
+
+	public Hero hero1;
 	public Draw(){
 		randomizer = new Random();
 		spawnEnemy();
+		hero1 = new Hero(this);
 		
 		try{
 			image = ImageIO.read(resource);
@@ -77,121 +81,9 @@ public class Draw extends JComponent{
 			enemyCount++;
 		}
 	}
-
-	public void reloadImage(){
-		state++;
-
-		if(state == 0){
-			resource = getClass().getResource("run0.png");
-		}
-		else if(state == 1){
-			resource = getClass().getResource("run1.png");
-		}
-		else if(state == 2){
-			resource = getClass().getResource("run2.png");
-		}
-		else if(state == 3){
-			resource = getClass().getResource("run3.png");
-		}
-		else if(state == 4){
-			resource = getClass().getResource("run4.png");
-		}
-		else if(state == 5){
-			resource = getClass().getResource("run5.png");
-			state = 0;
-		}
-
-		try{
-			image = ImageIO.read(resource);
-		}
-		catch(IOException e){
-			e.printStackTrace();
-		}
-	}
-
-
-	public void attackAnimation(){
-		Thread thread1 = new Thread(new Runnable(){
-			public void run(){
-				for(int ctr = 0; ctr < 5; ctr++){
-					try {
-						if(ctr==4){
-							resource = getClass().getResource("run0.png");
-						}
-						else{
-							resource = getClass().getResource("attack"+ctr+".png");
-						}
-						
-						try{
-							image = ImageIO.read(resource);
-						}
-						catch(IOException e){
-							e.printStackTrace();
-						}
-				        repaint();
-				        Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-
-
-				for(int x=0; x<monsters.length; x++){
-					if(monsters[x]!=null){
-						if(monsters[x].contact){
-							monsters[x].life = monsters[x].life - 10;
-						}
-					}
-				}
-			}
-		});
-		thread1.start();
-	}
-
-	
-
-
-	public void moveUp(){
-		y = y - 5;
-		
-		reloadImage();
-		repaint();
-		checkCollision();
-		
-	}
-
-	public void moveDown(){
-		y = y + 5;
-		
-		
-		reloadImage();
-		repaint();
-		checkCollision();
-		
-	}
-
-	public void moveLeft(){
-		x = x - 5;
-		
-		repaint();
-		checkCollision();
-	}
-
-	public void moveRight(){
-		x = x + 5;
-		reloadImage();
-		repaint();
-		checkCollision();
-	}
-
-	public void attack(){
-		attackAnimation();
-	
-	}
-
 	public void checkCollision(){
-		int xChecker = x + width;
-		int yChecker = y;
+		int xChecker = hero1.x + width;
+		int yChecker = hero1.y;
 
 		for(int x=0; x<monsters.length; x++){
 			boolean collideX = false;
@@ -229,6 +121,9 @@ public class Draw extends JComponent{
 			}
 		}
 	}
+
+
+
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -238,7 +133,7 @@ public class Draw extends JComponent{
 		// character grid for hero
 		// g.setColor(Color.YELLOW);
 		// g.fillRect(x, y, width, height);
-		g.drawImage(image, x, y, this);
+		g.drawImage(hero1.image, hero1.x, hero1.y, this);
 		
 		for(int c = 0; c < monsters.length; c++){
 			if(monsters[c]!=null){
